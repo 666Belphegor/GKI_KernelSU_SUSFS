@@ -63,7 +63,7 @@ runs:
         mkdir -p "$module_dir/bin"
         install -m 0755 "$source_dir/bin/nm-arm64" "$module_dir/bin/nm-arm64"
         install -m 0755 "$source_dir/bin/nm-arm" "$module_dir/bin/nm-arm"
-        sed -i "s/^versionCode=.*/versionCode=1/" "$module_dir/module.prop"
+        # sed -i "s/^versionCode=.*/versionCode=1/" "$module_dir/module.prop"
         printf '%s\n' "$actual_commit" > "$module_dir/NOMOUNT_SOURCE_COMMIT"
         (
           cd "$module_dir"
