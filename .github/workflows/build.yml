@@ -382,7 +382,41 @@ jobs:
           else
             echo "[-] KVER $KVER < 6.6"
           fi
+          
+      - name: Fix Duck Detector App Zygote SELinux attr/current timing asymmetry
+        shell: bash
+        working-directory: ${{ github.workspace }}/kernel
+        run: |
+          set -euo pipefail
+          python3 - << 'EOF'
+          import os, glob
 
+          for svc_path in glob.glob("**/security/selinux/ss/services.c", recursive=True):
+              with open(svc_path, "r") as f:
+                  code = f.read()
+              target = "scontextp = (char *)scontext;"
+              patch = """scontextp = (char *)scontext;
+          \tif (scontext_len > 1 && scontextp[0] == '\\n') {
+          \t\tscontextp++;
+          \t\tscontext_len--;
+          \t}"""
+              if target in code and "scontextp[0] == '\\n'" not in code:
+                  code = code.replace(target, patch, 1)
+                  with open(svc_path, "w") as f:
+                      f.write(code)
+                  print(f"[+] Patched {svc_path} to neutralize newline timing side-channel")
+
+          for hooks_path in glob.glob("**/security/selinux/hooks.c", recursive=True):
+              with open(hooks_path, "r") as f:
+                  hcode = f.read()
+              anchor = "if (size && value[0] && value[0] != '\\n') {"
+              if anchor in hcode:
+                  hcode = hcode.replace(anchor, "if (size && value[0]) {")
+                  with open(hooks_path, "w") as f:
+                      f.write(hcode)
+                  print(f"[+] Removed value[0] != '\\n' fast-skip in {hooks_path}")
+          EOF
+          
       - name: Baseband Guard
         if: (contains(inputs.feature_set, 'BBG') || inputs.feature_set == 'All')
         uses: ./.github/actions/bbg
