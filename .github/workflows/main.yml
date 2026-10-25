@@ -268,7 +268,7 @@ jobs:
             [susfs_commit_android14_5_15]="10b4f2156470338a5db2040f3d85992c285aa595"
             [susfs_commit_android14_6_1]="b57ed1998b82c4e3a2a81cdbf11172a560979c40"
             [susfs_commit_android15_6_6]="4a4cb1be85a4694372d3efb9420de69982eac29a"
-            [susfs_commit_android16_6_12]="9c9f19d8395693327c78df36569b44e94c187b8a"
+            [susfs_commit_android16_6_12]="3ff9fd3fac5bb01b71b2cfe96c612d469710fb74"
           )
           # BakaSU keeps its own SUSFS pin set (kept separate so it can diverge
           # again). Values = the same verified branch tips as PIN_SUSFS, now
@@ -280,7 +280,7 @@ jobs:
             [susfs_commit_android14_5_15]="10b4f2156470338a5db2040f3d85992c285aa595"
             [susfs_commit_android14_6_1]="b57ed1998b82c4e3a2a81cdbf11172a560979c40"
             [susfs_commit_android15_6_6]="4a4cb1be85a4694372d3efb9420de69982eac29a"
-            [susfs_commit_android16_6_12]="9c9f19d8395693327c78df36569b44e94c187b8a"
+            [susfs_commit_android16_6_12]="3ff9fd3fac5bb01b71b2cfe96c612d469710fb74"
           )
           # SukiSU-Ultra keeps its own SUSFS pin set too (same starting values).
           declare -A PIN_SUSFS_SUKISU_ULTRA=(
@@ -290,7 +290,7 @@ jobs:
             [susfs_commit_android14_5_15]="10b4f2156470338a5db2040f3d85992c285aa595"
             [susfs_commit_android14_6_1]="b57ed1998b82c4e3a2a81cdbf11172a560979c40"
             [susfs_commit_android15_6_6]="4a4cb1be85a4694372d3efb9420de69982eac29a"
-            [susfs_commit_android16_6_12]="9c9f19d8395693327c78df36569b44e94c187b8a"
+            [susfs_commit_android16_6_12]="3ff9fd3fac5bb01b71b2cfe96c612d469710fb74"
           )
 
           pick() { # pinned repo ref  -> pinned when verified, else latest
