@@ -243,7 +243,7 @@ jobs:
           # the old 0c0fdb96 pin; this tip is several manager commits ahead of
           # that layout - re-confirm the patch applies before relying on this
           # pin for susfs/root builds. BBG is kernel-side and unaffected.
-          PIN_KERNELSU="4663610011d03771a64e7c36a2aa65bd1794022d"
+          PIN_KERNELSU="75e179d378d7aaa0de8946358a3384444c3e36b0"
           # BakaSU: official main tip (2026-10-20,
           # "manager: support multiple module repositories, one-shot scripts and
           # other minimal fixes (#600)"). Advanced per user request to track
@@ -251,7 +251,7 @@ jobs:
           # (12-5.10/13-5.10/13-5.15/14-5.15/14-6.1) fs patches reference
           # `fake_state` and will fail to link with latest BakaSU; 6.6/6.12 are
           # unaffected. Watch those 5 families for build failures.
-          PIN_BAKASU="dac2d186406a0d2b0ce3c67cad5a1fa1adbf9f4d"
+          PIN_BAKASU="d5e9e025b8b49155f8014684d64c91742b465f65"
           # SukiSU-Ultra: builtin tip (2026-10-21,
           # "kernel: switch sig_fallback hook from weak symbol to static_call");
           # defines fake_state itself, calls the susfs_def.h no_su API -> OK on tips.
@@ -260,7 +260,7 @@ jobs:
           # the susfs4ksu v2.3 ABI era its supercall dispatch is written against.
           # master tip 3f06a69d (2026-10-21, manager install-page animation;
           # kernel ABI unchanged).
-          PIN_FINASU="3f06a69d40db4cbb5b86d239694c5adf911b2cce"
+          PIN_FINASU="48acc4fd949749978d8a8c29248ed9c80476eb27"
           declare -A PIN_SUSFS=(
             [susfs_commit_android12_5_10]="f43926dc94b8ffbf9b74321313536600f69367b1"
             [susfs_commit_android13_5_10]="cbe3fe7b9fa599d316f68b08b06cde48218eaff5"
