@@ -372,55 +372,6 @@ jobs:
           else
             echo "[-] KVER $KVER < 6.6"
           fi
-
-      - name: Fix Duck Detector App Zygote SELinux attr/current timing asymmetry
-        shell: bash
-        working-directory: ${{ github.workspace }}/kernel
-        run: |
-          set -euo pipefail
-          python3 - << 'EOF'
-          import os, glob
-
-          # 1. Samakan jalur eksekusi Payload A dan Payload B (leading newline '\n')
-          # di security/selinux/ss/services.c agar tidak terjadi early-exit pada Payload B
-          for svc_path in glob.glob("**/security/selinux/ss/services.c", recursive=True):
-              with open(svc_path, "r") as f:
-                  code = f.read()
-
-              # Target di dalam string_to_context_struct() / context_str_to_sid()
-              target = "scontextp = (char *)scontext;"
-              patch = """scontextp = (char *)scontext;
-          \tif (scontext_len > 1 && scontextp[0] == '\\n') {
-          \t\tscontextp++;
-          \t\tscontext_len--;
-          \t}"""
-
-              if target in code and "scontextp[0] == '\\n'" not in code:
-                  code = code.replace(target, patch, 1)
-                  with open(svc_path, "w") as f:
-                      f.write(code)
-                  print(f"[+] Patched {svc_path} to neutralize newline timing side-channel")
-              else:
-                  print(f"[*] Target not found or already patched in {svc_path}")
-
-          # 2. Pastikan di security/selinux/hooks.c (selinux_setprocattr)
-          # newline stripping di awal juga ditangani sebelum masuk ke hook/parser
-          for hooks_path in glob.glob("**/security/selinux/hooks.c", recursive=True):
-              with open(hooks_path, "r") as f:
-                  hcode = f.read()
-
-              # Di selinux_setprocattr: setelah "error = avc_has_perm(mysid, mysid, SECCLASS_PROCESS, PROCESS__SETCURRENT, NULL);"
-              # jika proses adalah app_zygote (UID 90000-99999 atau app UID) dan value diawali '\n',
-              # geser pointer agar waktu parsing identik antara A dan B.
-              anchor = "if (size && value[0] && value[0] != '\\n') {"
-              if anchor in hcode:
-                  # Beberapa patch KSU/SuSFS menggunakan pengecekan value[0] != '\n' yang justru membuat
-                  # Payload B (diawali '\n') melewati blok KSU dan keluar lebih cepat!
-                  hcode = hcode.replace(anchor, "if (size && value[0]) {")
-                  with open(hooks_path, "w") as f:
-                      f.write(hcode)
-                  print(f"[+] Removed value[0] != '\\n' fast-skip in {hooks_path}")
-          EOF
           
       - name: Baseband Guard
         if: (contains(inputs.feature_set, 'BBG') || inputs.feature_set == 'All')
