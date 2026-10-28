@@ -243,7 +243,7 @@ jobs:
           # the old 0c0fdb96 pin; this tip is several manager commits ahead of
           # that layout - re-confirm the patch applies before relying on this
           # pin for susfs/root builds. BBG is kernel-side and unaffected.
-          PIN_KERNELSU="75e179d378d7aaa0de8946358a3384444c3e36b0"
+          PIN_KERNELSU="fc02a07efda746c2062c05df485cfb1d59d8863e"
           # BakaSU: official main tip (2026-10-20,
           # "manager: support multiple module repositories, one-shot scripts and
           # other minimal fixes (#600)"). Advanced per user request to track
